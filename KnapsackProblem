@@ -1,0 +1,7 @@
+import java.util.List;
+
+public interface KnapsackProblem {
+    Result solve(int capacity, List<Item> items);
+    boolean validateItems(List<Item> items);
+    int calculateTotalValue(List<Item> items);
+}
