@@ -1,0 +1,34 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class KnapsackSolver {
+
+    public Result solve(int capacity, List<Item> items) {
+        int n = items.size();
+        int[][] dp = new int[n + 1][capacity + 1];
+
+        for (int i = 1; i <= n; i++) {
+            for (int w = 1; w <= capacity; w++) {
+                if (items.get(i - 1).getWeight() <= w) {
+                    dp[i][w] = Math.max(
+                            items.get(i - 1).getValue() + dp[i - 1][w - items.get(i - 1).getWeight()],
+                            dp[i - 1][w]
+                    );
+                } else {
+                    dp[i][w] = dp[i - 1][w];
+                }
+            }
+        }
+
+        List<Item> selectedItems = new ArrayList<>();
+        int w = capacity;
+        for (int i = n; i > 0 && w > 0; i--) {
+            if (dp[i][w] != dp[i - 1][w]) {
+                selectedItems.add(items.get(i - 1));
+                w -= items.get(i - 1).getWeight();
+            }
+        }
+
+        return new Result(dp[n][capacity], selectedItems);
+    }
+}
